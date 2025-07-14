@@ -21,11 +21,17 @@ Route::get('/dashboard', function () {
 Route::get('/posts/{id}', function ($id) {
     return Inertia::render('posts/show', ['id' => $id]);
 })->name('posts.show');
+Route::get('/posts/{id}/edit', function ($id) {
+    return Inertia::render('posts/edit', ['id' => $id]);
+})->name('posts.edit');
 
 Route::get('/users', function () {
     return Inertia::render('users/index');
 });
 
+Route::get('/posts', function () {
+    return Inertia::render('posts/index');
+});
 
 
 

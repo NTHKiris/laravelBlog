@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import axios from 'axios';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
+import Loading from '@/components/loading';
 import { Button } from '@/components/ui/button';
 import SearchBar from "@/components/SearchBar";
 export default function Dashboard() {
@@ -46,7 +47,7 @@ export default function Dashboard() {
             <div className="max-w-6xl mx-auto flex gap-8 py-8">
                 <div className="flex-1 flex flex-col gap-6 w-6xl">
                     <SearchBar value={search} onChange={setSearch} />
-                    {loading && <div>Đang tải...</div>}
+                    {loading && <Loading />}
                     {!loading && filteredPosts.length === 0 && <div>No posts to display</div>}
                     {filteredPosts.map((post) => (
                         <Card key={post.id} className="">

@@ -4,6 +4,7 @@ import axios from 'axios';
 import AppLayout from '@/layouts/app-layout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Loading from '@/components/loading';
 
 
 type User = {
@@ -65,22 +66,24 @@ const Index = () => {
                 <Card className="min-h-2/3">
 
                     <div className="max-w-7xl mx-auto">
-                        {loading && <div>Loading...</div>}
-                        {!loading && users.length === 0 && <div>No Users</div>}
+                        {loading && <Loading />}
+                        {!loading && users.length === 0 && <div>You are not admin</div>}
                         <table className="w-full ">
-                            <thead>
-                                <tr>
-                                    <th className='border px-4 py-2'>STT</th>
-                                    {/* <th className="border px-4 py-2">ID</th> */}
-                                    <th className="border px-4 py-2">Name</th>
-                                    <th className="border px-4 py-2">Email</th>
-                                    <th className="border px-4 py-2">Email Verified At</th>
-                                    <th className="border px-4 py-2">Role</th>
-                                    <th className="border px-4 py-2">Number Of Posts</th>
-                                    <th className="border px-4 py-2">Number Of Comments</th>
-                                    <th className="border px-4 py-2">Action</th>
-                                </tr>
-                            </thead>
+                            {(!loading && users.length > 0) && (
+                                <thead>
+                                    <tr>
+                                        <th className='border px-4 py-2'>STT</th>
+                                        {/* <th className="border px-4 py-2">ID</th> */}
+                                        <th className="border px-4 py-2">Name</th>
+                                        <th className="border px-4 py-2">Email</th>
+                                        <th className="border px-4 py-2">Email Verified At</th>
+                                        <th className="border px-4 py-2">Role</th>
+                                        <th className="border px-4 py-2">Number Of Posts</th>
+                                        <th className="border px-4 py-2">Number Of Comments</th>
+                                        <th className="border px-4 py-2">Action</th>
+                                    </tr>
+                                </thead>
+                            )}
                             <tbody>
                                 {users.map((user) => (
                                     <tr key={user.id} className="hover:bg-gray-50">

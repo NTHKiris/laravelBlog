@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { send } from "process";
+import Loading from "@/components/loading";
 export default function ShowPost({ id }: { id: number }) {
     const [post, setPost] = useState<any>(null)
     const [comments, setComments] = useState<any[]>([]);
@@ -64,7 +65,7 @@ export default function ShowPost({ id }: { id: number }) {
         });
         setComments(res.data.data);
     };
-    if (loading) return <AppLayout><div>Đang tải...</div></AppLayout>;
+    if (loading) return <AppLayout><Loading /></AppLayout>;
     if (!post) return <AppLayout><div>Không tìm thấy bài viết.</div></AppLayout>;
     return (
         <AppLayout>

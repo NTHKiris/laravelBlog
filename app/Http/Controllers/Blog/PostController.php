@@ -31,6 +31,30 @@ class PostController extends Controller
 
     }
 
+    public function getPosts(Request $request)
+    {
+        try {
+            $user = $request->user();
+            if ($user->hasRole('reader')) {
+                return response()->json([
+                    'error' => true,
+                    'message' => "User not authorize"
+                ]);
+            }
+            $q = Post::with(['user', 'category', 'comments', 'thumpnail'])->orderBy('created_at', 'desc');
+
+            if ($user->hasRole('writer')) {
+                $q->where('user_id', $user->id);
+            }
+            $posts = $q->get();
+            return new PostCollection($posts);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => $th->getMessage()
+            ], 500);
+        }
+
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -64,7 +88,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Post $post): PostResource
     {
         $this->authorize('view', $post);
         $post->load(['user', 'category', 'thumpnail', 'comments']);
