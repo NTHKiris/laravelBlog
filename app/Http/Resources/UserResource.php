@@ -20,8 +20,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at ? $this->email_verified_at : "Not Verify",
             'role' => $this->role->slug,
-            'posts_count' => $this->posts->count(),
-            'comments_count' => $this->comments->count()
+            'posts_count' => $this->posts ? $this->posts->count() : 0,
+            'comments_count' => $this->comments ? $this->comments->count() : 0
         ];
     }
 }

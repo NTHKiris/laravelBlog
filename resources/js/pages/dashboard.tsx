@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import axios from 'axios';
@@ -53,12 +53,12 @@ export default function Dashboard() {
                         <Card key={post.id} className="">
                             <img
                                 src={
-                                    post.thumpnail && post.thumpnail.path
-                                        ? `/storage/${post.thumpnail.path}`
+                                    post.thumpnail
+                                        ? post.thumpnail
                                         : `https://picsum.photos/seed/${post.id}/600/300`
                                 }
                                 alt={post.title}
-                                className="w-full h-full "
+                                className="w-full h-full object-cover"
                             />
                             <CardHeader>
                                 <CardTitle>{post.title}</CardTitle>

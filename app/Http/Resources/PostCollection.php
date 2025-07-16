@@ -26,7 +26,7 @@ class PostCollection extends ResourceCollection
                     'category' => $post->category->name,
                     'status' => $post->status,
                     'author' => $post->user->name,
-                    'thumbnail' => $post->thumpnail ? $post->thumpnail->path : null,
+                    'thumpnail' => $post->thumpnail ? $post->thumpnail->path : null,
                     'comments_count' => $post->comments()->count(),
                 ];
             }),

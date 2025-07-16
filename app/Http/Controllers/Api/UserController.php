@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -18,8 +19,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $this->authorize('view', User::class);
-        $users = User::all();
+        $this->authorize('viewAny', User::class);
+        $users = User::with('role')->get();
         return UserResource::collection($users);
     }
 

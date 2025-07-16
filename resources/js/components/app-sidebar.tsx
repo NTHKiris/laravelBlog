@@ -6,8 +6,10 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const mainNavItems: NavItem[] = [
+const allNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
@@ -17,11 +19,13 @@ const mainNavItems: NavItem[] = [
         title: 'Manage User',
         href: '/users',
         icon: Users,
+        roles: ['admin'], // Only show for admin
     },
     {
         title: 'Manage Posts',
         href: '/posts',
         icon: Folder,
+        roles: ['admin', 'writer'], // Show for admin and writer
     },
 ];
 
@@ -39,6 +43,65 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const [userRole, setUserRole] = useState<string>('');
+    const [filteredNavItems, setFilteredNavItems] = useState<NavItem[]>(allNavItems);
+
+    useEffect(() => {
+        const fetchUserRole = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    setFilteredNavItems([allNavItems[0]]); // Only dashboard
+                    return;
+                }
+
+                const response = await axios.get('/api/user', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                // Get user role
+                let role = '';
+                if (response.data.role?.slug) {
+                    role = response.data.role.slug;
+                } else if (response.data.role?.name) {
+                    role = response.data.role.name.toLowerCase();
+                } else if (response.data.role_id) {
+                    const roleMap: { [key: number]: string } = {
+                        1: 'admin',
+                        2: 'writer',
+                        3: 'reader',
+                        4: 'banned'
+                    };
+                    role = roleMap[response.data.role_id] || '';
+                }
+
+                setUserRole(role);
+
+
+                let filtered: NavItem[] = [];
+
+                if (role.toLowerCase() === 'admin') {
+
+                    filtered = allNavItems;
+                } else if (role.toLowerCase() === 'writer') {
+                    filtered = allNavItems.filter(item =>
+                        !item.roles || item.roles.includes('writer')
+                    );
+                } else {
+                    filtered = [allNavItems[0]];
+                }
+
+                setFilteredNavItems(filtered);
+
+            } catch (error) {
+                console.error('Error fetching user role:', error);
+                setFilteredNavItems(allNavItems);
+            }
+        };
+
+        fetchUserRole();
+    }, []);
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -54,7 +117,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={filteredNavItems} />
             </SidebarContent>
 
             <SidebarFooter>

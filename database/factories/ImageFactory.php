@@ -18,7 +18,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'path' => fake()->imageUrl(640, 480, null, true),
+            'path' => 'https://picsum.photos/640/400?random=' . rand(1, 1000),
             'name' => fake()->word(),
             'type' => 'default',
             'imageable_id' => null,
