@@ -21,9 +21,10 @@ const Index = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<User | null>(null)
+    const token = checkToken();
+    if (!token) return;
     useEffect(() => {
-        const token = checkToken();
-        if (!token) return;
+
 
         axios.get('/api/users', {
             headers: { Authorization: `Bearer ${token}` }

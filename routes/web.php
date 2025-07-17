@@ -17,7 +17,12 @@ Route::get('/dashboard', function () {
     return Inertia::render('dashboard');
 });
 
-
+Route::get('/posts/', function () {
+    return Inertia::render('posts/index');
+});
+Route::get('/posts/trash', function () {
+    return Inertia::render('posts/trash');
+});
 Route::get('/posts/{id}', function ($id) {
     return Inertia::render('posts/show', ['id' => $id]);
 })->name('posts.show');
@@ -29,9 +34,7 @@ Route::get('/users', function () {
     return Inertia::render('users/index');
 });
 
-Route::get('/posts', function () {
-    return Inertia::render('posts/index');
-});
+
 
 
 

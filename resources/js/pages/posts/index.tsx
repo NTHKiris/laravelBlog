@@ -19,9 +19,10 @@ const index = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
+    const token = checkToken();
+    if (!token) return;
     useEffect(() => {
-        const token = checkToken();
-        if (!token) return;
+
         axios.get('api/auth/me', {
             headers: { Authorization: `Bearer ${token}` }
         }).then(res => setCurrentUser(res.data.data))
@@ -70,14 +71,26 @@ const index = () => {
     return (
         <AppLayout>
             <Card className='min-h-2/3'>
-                <div className='max-w-7xl mx-auto'>
+                <div className='max-w-7xl mx-auto p-6'>
+
+
                     {loading && <Loading />}
                     {!loading && posts.length === 0 && <div>You are not writer</div>}
                     {!loading && posts.length > 0 && (
-                        <Table columns={columns} data={data} />
+                        <>
+                            <div className='flex justify-between items-center mb-6'>
+                                <h1 className='text-2xl font-bold'>Post Management</h1>
+                                <Button
+                                    className='bg-gray-600 hover:bg-gray-700 text-white'
+                                    onClick={() => router.visit('/posts/trash')}
+                                >
+                                    🗑️ Trash
+                                </Button>
+                            </div>
+                            <Table columns={columns} data={data} />
+                        </>
                     )}
                 </div>
-
             </Card>
         </AppLayout>
     )

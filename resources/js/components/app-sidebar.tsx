@@ -19,13 +19,13 @@ const allNavItems: NavItem[] = [
         title: 'Manage User',
         href: '/users',
         icon: Users,
-        roles: ['admin'], // Only show for admin
+        roles: ['admin'],
     },
     {
         title: 'Manage Posts',
         href: '/posts',
         icon: Folder,
-        roles: ['admin', 'writer'], // Show for admin and writer
+        roles: ['admin', 'writer'],
     },
 ];
 
@@ -44,7 +44,7 @@ const footerNavItems: NavItem[] = [
 
 export function AppSidebar() {
     const [userRole, setUserRole] = useState<string>('');
-    const [filteredNavItems, setFilteredNavItems] = useState<NavItem[]>(allNavItems);
+    const [filteredNavItems, setFilteredNavItems] = useState<NavItem[]>([]);
 
     useEffect(() => {
         const fetchUserRole = async () => {
@@ -59,7 +59,7 @@ export function AppSidebar() {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
-                // Get user role
+
                 let role = '';
                 if (response.data.role?.slug) {
                     role = response.data.role.slug;

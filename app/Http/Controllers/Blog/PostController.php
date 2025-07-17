@@ -134,6 +134,29 @@ class PostController extends Controller
             ]
         ], 200);
     }
+    public function trash(Request $request)
+    {
+        $user = $request->user();
+        if ($user->hasRole('reader')) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Need admin or writer'
+            ], 403);
+        }
+        $q = Post::onlyTrashed()->with(['user', 'category', 'comments', 'thumpnail']);
+        if ($user->hasRole('writer')) {
+            $q->where('user_id', $user->id);
+        }
+
+        $posts = $q->get();
+        if ($posts->isEmpty()) {
+            return response()->json([
+                'message' => 'No post in trash'
+            ], 404);
+        }
+        return new PostCollection($posts);
+
+    }
     public function restore($id)
     {
         $post = Post::withTrashed()->findOrFail($id);

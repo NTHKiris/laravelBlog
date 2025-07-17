@@ -10,22 +10,22 @@ export default function Dashboard() {
     const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
-
+    const token = localStorage.getItem('token');
+    const expires = localStorage.getItem('token_expires');
+    if (!token) {
+        router.visit('/login');
+        return;
+    }
+    const now = new Date();
+    const expiresAt = new Date(expires as string);
+    if (now > expiresAt) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('token_expires');
+        router.visit('/login');
+        return;
+    }
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const expires = localStorage.getItem('token_expires');
-        if (!token) {
-            router.visit('/login');
-            return;
-        }
-        const now = new Date();
-        const expiresAt = new Date(expires as string);
-        if (now > expiresAt) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('token_expires');
-            router.visit('/login');
-            return;
-        }
+
         axios.get('/api/posts', {
             headers: { Authorization: `Bearer ${token}` }
         })

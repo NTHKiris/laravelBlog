@@ -22,6 +22,7 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     //posts
+    Route::get('/posts/trash', [PostController::class, 'trash']);
     Route::apiResource('posts', PostController::class);
     Route::get('/all/posts', [PostController::class, 'getPosts']);
     Route::post('posts/{id}/restore', [PostController::class, 'restore'])->name('posts.restore');
